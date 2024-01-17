@@ -1,8 +1,26 @@
-import 'package:flutter/material.dart';
-import 'package:shopping_list_app/screens/home_screen.dart';
+import 'dart:developer';
 
-void main() {
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'package:shopping_list_app/screens/home_screen.dart';
+import 'package:shopping_list_app/services/api_service.dart';
+
+import 'Constants/constants.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await loadConfig();
+  ApiService.init();
+  log(Constants.apiUrl);
   runApp(const MyApp());
+}
+
+Future<void> loadConfig() async {
+  String jsonString = await rootBundle.loadString('config/config.json');
+  Map<String, dynamic> jsonMap = json.decode(jsonString);
+
+  Constants.apiUrl = jsonMap['apiUrl'];
 }
 
 class MyApp extends StatelessWidget {
